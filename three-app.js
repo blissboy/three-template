@@ -1,4 +1,9 @@
 var scene, camera, renderer, cameraControls;
+var gui;
+var values = {
+    squareColor: 14494549
+};
+
 const bubble_radius = 300;
 const bubble_points_lat = 8;
 const bubble_points_long = 9;
@@ -20,7 +25,18 @@ function init() {
     renderer.setClearColor(0x000000, 1);
     document.body.appendChild(renderer.domElement);
 
+    createGUI();
     createScene();
+}
+
+function createGUI() {
+    var gui = new dat.GUI();
+    gui.addColor(values, 'squareColor').onChange(() => {
+        let box = scene.getObjectByName('myBox');
+        if (box) {
+            box.material.color.set(values.squareColor);
+        }
+    });
 }
 
 function createScene() {
@@ -37,10 +53,16 @@ function updateScene() {
 
 function createGeometries() {
     let material = new THREE.MeshLambertMaterial({ color: 0x22ccddd });
-    scene.add(new THREE.Mesh(
+    let mesh = new THREE.Mesh(
         new THREE.BoxGeometry(10,10,10),
-        new THREE.MeshLambertMaterial({ color: 0x22ccddd })
-    ));
+        new THREE.MeshLambertMaterial({ color: values.squareColor })
+    );
+    mesh.name = 'myBox';
+    scene.add(mesh);
+    // scene.add(new THREE.Mesh(
+    //     box,
+    //     new THREE.MeshLambertMaterial({ color: values.squareColor })
+    // ));
 }
 
 function updateGeometries() {
