@@ -4,10 +4,6 @@ var values = {
     squareColor: 14494549
 };
 
-const bubble_radius = 300;
-const bubble_points_lat = 8;
-const bubble_points_long = 9;
-
 var render = function () {
     requestAnimationFrame(render);
     updateScene();
