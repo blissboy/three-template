@@ -1,7 +1,7 @@
 var scene, camera, renderer, cameraControls;
 var gui;
 var values = {
-    squareColor: 14494549
+    squareColor: 0x22ccddd
 };
 
 var render = function () {
@@ -48,17 +48,12 @@ function updateScene() {
 }
 
 function createGeometries() {
-    let material = new THREE.MeshLambertMaterial({ color: 0x22ccddd });
     let mesh = new THREE.Mesh(
         new THREE.BoxGeometry(10,10,10),
         new THREE.MeshLambertMaterial({ color: values.squareColor })
     );
     mesh.name = 'myBox';
     scene.add(mesh);
-    // scene.add(new THREE.Mesh(
-    //     box,
-    //     new THREE.MeshLambertMaterial({ color: values.squareColor })
-    // ));
 }
 
 function updateGeometries() {
