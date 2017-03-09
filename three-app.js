@@ -1,7 +1,39 @@
 var scene, camera, renderer, cameraControls;
 var gui;
 var values = {
-    squareColor: 0x22ccddd
+    squareColor: 0x22ccddd,
+    lights: [
+        {
+            intensity: 0.5,
+            color: 0xffffff,
+            position: {
+                x: 0,
+                y: 0,
+                z: 400
+            },
+            name: 'light1'
+        },
+        {
+            intensity: 0.7,
+            color: 0xffffff,
+            position: {
+                x: 0,
+                y: 400,
+                z: 0
+            },
+            name: 'light2'
+        },
+        {
+            intensity: 0.9,
+            color: 0xffffff,
+            position: {
+                x: 400,
+                y: 0,
+                z: 0
+            },
+            name: 'light3'
+        }
+    ]
 };
 
 var render = function () {
@@ -33,6 +65,13 @@ function createGUI() {
             box.material.color.set(values.squareColor);
         }
     });
+
+    values.lights.forEach((light) => {
+        gui.addColor(light, 'color').onChange(() => {
+            scene.getObjectByName(light.name).color.set(light.color);
+        })
+    });
+
 }
 
 function createScene() {
@@ -49,9 +88,10 @@ function updateScene() {
 
 function createGeometries() {
     let mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(10,10,10),
+        new THREE.BoxGeometry(10, 10, 10),
         new THREE.MeshLambertMaterial({ color: values.squareColor })
     );
+
     mesh.name = 'myBox';
     scene.add(mesh);
 }
@@ -65,18 +105,24 @@ function updateGeometries() {
 
 
 function setupLighting() {
-    let light = new THREE.PointLight(0xffffff, .5, 0);
-    light.position.set(0, 400, 0);
-    scene.add(light);
+    let lights = new THREE.Group();
+    lights.name = 'lights';
+    values.lights.forEach((light) => {
+        let lite = new THREE.PointLight(light.color, light.intensity);
+        lite.position.set(light.position.x, light.position.y, light.position.z);
+        lite.name = light.name;
+        lights.add(lite);
+    });
 
-    let light2 = new THREE.PointLight(0xffaaaa, .3, 0);
-    light2.position.set(400, 0, 0);
-    scene.add(light2);
+    // let light2 = new THREE.PointLight(0xffaaaa, .3, 0);
+    // light2.position.set(400, 0, 0);
+    // lights.add(light2);
 
-    let light3 = new THREE.PointLight(0xffffff, .1, 0);
-    light3.position.set(0, 0, 400);
-    scene.add(light3);
+    // let light3 = new THREE.PointLight(0xffffff, .1, 0);
+    // light3.position.set(0, 0, 400);
+    // lights.add(light3);
 
+    scene.add(lights);
     scene.add(new THREE.AmbientLight(0xff9999, 0.7));
 }
 
@@ -95,4 +141,3 @@ function updateCamera() {
 function vec3ToString(vec) {
     return (`${vec.x},${vec.y},${vec.z}`);
 }
-
