@@ -67,8 +67,12 @@ function createGUI() {
     });
 
     values.lights.forEach((light) => {
-        gui.addColor(light, 'color').onChange(() => {
+        let folder = gui.addFolder(light.name);
+        folder.addColor(light, 'color').onChange(() => {
             scene.getObjectByName(light.name).color.set(light.color);
+        });
+        folder.add(light, 'intensity',0,1).onChange(() => {
+            scene.getObjectByName(light.name).intensity = light.intensity;
         })
     });
 
@@ -114,14 +118,6 @@ function setupLighting() {
         lights.add(lite);
     });
 
-    // let light2 = new THREE.PointLight(0xffaaaa, .3, 0);
-    // light2.position.set(400, 0, 0);
-    // lights.add(light2);
-
-    // let light3 = new THREE.PointLight(0xffffff, .1, 0);
-    // light3.position.set(0, 0, 400);
-    // lights.add(light3);
-
     scene.add(lights);
     scene.add(new THREE.AmbientLight(0xff9999, 0.7));
 }
@@ -135,7 +131,6 @@ function setupCamera() {
 }
 
 function updateCamera() {
-
 }
 
 function vec3ToString(vec) {
